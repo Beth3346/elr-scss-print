@@ -1,8 +1,7 @@
-# elr-scss-accordion
+# elr-scss-print
 
-[![Build Status](https://travis-ci.org/Beth3346/elr-scss-accordion.svg?branch=master)](https://travis-ci.org/Beth3346/elr-scss-accordion)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![npm](https://img.shields.io/npm/dm/elr-scss-accordion.svg?style=flat)]()
+[![npm](https://img.shields.io/npm/dm/elr-scss-print.svg?style=flat)](https://npmjs.com/package/elr-scss-print)
 
 a library of sass mixins
 
@@ -11,17 +10,14 @@ a library of sass mixins
 Download node at [nodejs.org](http://nodejs.org) and install it, if you haven't already.
 
 ```sh
-npm install elr-scss-accordion --save
+npm install elr-scss-print --save
 ```
-
-
 
 ## Dependencies
 
 None
 
 ## Dev Dependencies
-
 
 None
 
