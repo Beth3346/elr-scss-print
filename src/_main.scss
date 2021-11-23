@@ -1,42 +1,77 @@
-@import "src/alerts";
-@import "src/buttons";
-@import "src/layout";
-// @import 'src/lists';
-// @import 'src/print';
-// @import 'src/responsiveness';
-// @import 'src/typography';
+// scss-lint:disable ImportantRule
+// Print styles.
+// http://www.phpied.com/delay-loading-your-print-css/
 
-@mixin elr-helper-classes($config: ()) {
-  $config: extend(
-    (
-      link-color: #1976d2,
-      color: #333,
-      border-radius: 3px,
-    ),
-    $config
-  );
+@mixin print() {
+  *,
+  *:before,
+  *:after,
+  p:first-letter,
+  div:first-letter,
+  blockquote:first-letter,
+  li:first-letter,
+  p:first-line,
+  div:first-line,
+  blockquote:first-line,
+  li:first-line {
+    background: transparent !important;
+    color: $black !important; //Black prints faster: http://www.sanbeiji.com/archive
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
 
-  $link-color: map-get($config, link-color);
-  $color: map-get($config, color);
-  $border-radius: map-get($config, border-radius);
+  a,
+  a:visited {
+    text-decoration: underline;
+  }
 
-  @include elr-buttons(
-    $config: (
-      background-color: $link-color,
-      border-radius: $border-radius,
-    )
-  );
-  @include elr-display-classes;
-  @include elr-flex-classes;
-  @include elr-layout-classes;
-  @include elr-positioning-classes;
-  // @include elr-list-classes;
-  // @include elr-responsive-classes;
-  // @include elr-typography-classes;
-}
+  a[href]:after {
+    content: ' (' attr(href) ')';
+  }
 
-@mixin elr-action-helper-classes() {
-  @include elr-notification-classes;
-  // @include elr-buttons-action;
-  // @include elr-typography-states;
+  abbr[title]:after {
+    content: ' (' attr(title) ')';
+  }
+
+  // Don't show links that are fragment identifiers,
+  // or use the `javascript:` pseudo protocol
+
+  a[href^='#']:after,
+  a[href^='javascript:']:after {
+    content: '';
+  }
+
+  pre {
+    white-space: pre-wrap !important;
+  }
+
+  pre,
+  blockquote {
+    border: 1px solid $darker-grey;
+    page-break-inside: avoid;
+  }
+
+  // Printing Tables:
+  // http://css-discuss.incutio.com/wiki/Printing_Tables
+
+  thead {
+    display: table-header-group;
+  }
+
+  tr,
+  img {
+    page-break-inside: avoid;
+  }
+
+  p,
+  h2,
+  h3 {
+    orphans: 3;
+    widows: 3;
+  }
+
+  h2,
+  h3 {
+    page-break-after: avoid;
+  }
 }
