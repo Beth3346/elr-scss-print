@@ -1,77 +1,453 @@
 // scss-lint:disable ImportantRule
 // Print styles.
 // http://www.phpied.com/delay-loading-your-print-css/
+@import "elr-scss-config/src/main";
 
-@mixin print() {
-  *,
-  *:before,
-  *:after,
-  p:first-letter,
-  div:first-letter,
-  blockquote:first-letter,
-  li:first-letter,
-  p:first-line,
-  div:first-line,
-  blockquote:first-line,
-  li:first-line {
-    background: transparent !important;
-    color: $black !important; //Black prints faster: http://www.sanbeiji.com/archive
-    box-shadow: none !important;
-    text-shadow: none !important;
+@mixin elr-print() {
+  @page {
+    margin: 1cm 2cm;
   }
 
-  a,
-  a:visited {
-    text-decoration: underline;
+  @media print {
+    *,
+    *:before,
+    *:after,
+    p:first-letter,
+    div:first-letter,
+    blockquote:first-letter,
+    li:first-letter,
+    p:first-line,
+    div:first-line,
+    blockquote:first-line,
+    li:first-line {
+      background: transparent !important;
+      color: #000 !important; //Black prints faster: http://www.sanbeiji.com/archive
+      box-shadow: none !important;
+      text-shadow: none !important;
+    }
+
+    main {
+      position: relative;
+      padding-top: 60px;
+      padding-bottom: 40px;
+      margin: auto;
+      width: 210mm;
+      height: 297mm;
+      // border-bottom: 1px solid #000;
+      page-break-after: always;
+    }
+
+    a,
+    a:visited {
+      text-decoration: underline;
+    }
+
+    a[href]:after {
+      content: " (" attr(href) ")";
+    }
+
+    abbr[title]:after {
+      content: " (" attr(title) ")";
+    }
+
+    // Don't show links that are fragment identifiers,
+    // or use the `javascript:` pseudo protocol
+
+    a[href^="#"]:after,
+    a[href^="javascript:"]:after {
+      content: "";
+    }
+
+    pre {
+      white-space: pre-wrap !important;
+    }
+
+    pre,
+    blockquote {
+      border: 1px solid $dark-gray;
+      page-break-inside: avoid;
+    }
+
+    hr {
+      display: none;
+    }
+
+    .content-block,
+    p {
+      page-break-inside: avoid;
+    }
+
+    html,
+    body {
+      background-color: #fff;
+      width: 210mm;
+      height: 297mm;
+    }
+
+    body > header,
+    body > footer {
+      display: none;
+    }
+
+    footer {
+      padding: 5px 0;
+    }
+
+    // Printing Tables:
+    // http://css-discuss.incutio.com/wiki/Printing_Tables
+
+    thead {
+      display: table-header-group;
+    }
+
+    tr,
+    img {
+      page-break-inside: avoid;
+    }
+
+    p,
+    h2,
+    h3 {
+      orphans: 3;
+      widows: 3;
+    }
+
+    h2,
+    h3 {
+      page-break-after: avoid;
+    }
+  }
+}
+
+@mixin elr-pdf-styles($config: ()) {
+  .page-content {
+    position: relative;
+    padding-top: 60px;
+    padding-bottom: 40px;
+    margin: auto;
+    width: 210mm;
+    height: 297mm;
+    border-bottom: 1px solid #000;
+    page-break-after: always;
   }
 
-  a[href]:after {
-    content: ' (' attr(href) ')';
+  hr,
+  footer {
+    position: absolute;
+    width: 100%;
+    left: 0;
+    bottom: 0;
   }
 
-  abbr[title]:after {
-    content: ' (' attr(title) ')';
+  footer {
+    padding: 5px 0;
   }
 
-  // Don't show links that are fragment identifiers,
-  // or use the `javascript:` pseudo protocol
-
-  a[href^='#']:after,
-  a[href^='javascript:']:after {
-    content: '';
+  header::before {
+    content: "";
+    display: block;
+    width: 100%;
+    text-align: center;
+    font-size: 12px;
+    color: #333;
   }
 
-  pre {
-    white-space: pre-wrap !important;
+  footer::before {
+    counter-increment: footer;
+    content: "Page: " counter(footer);
+    display: block;
+    width: 100%;
+    text-align: center;
+    font-size: 12px;
+    color: #333;
   }
 
-  pre,
-  blockquote {
-    border: 1px solid $darker-grey;
-    page-break-inside: avoid;
+  .module-title {
+    padding-top: 80px;
   }
 
-  // Printing Tables:
-  // http://css-discuss.incutio.com/wiki/Printing_Tables
-
-  thead {
-    display: table-header-group;
+  .module-subtitle {
+    padding-top: 40px;
+    padding-bottom: 80px;
   }
 
-  tr,
+  header {
+    text-align: center;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    text-align: center;
+  }
+
+  h1 {
+    font-size: 52px;
+    /* font-family: 'Playfair Display', serif; */
+    font-family: "Libre Baskerville", serif;
+    padding: 0;
+    color: #171d6e;
+  }
+
+  h1.module-name {
+    font-size: 68px;
+  }
+
+  h2 {
+    padding: 20px 0;
+    font-size: 36px;
+    text-align: center;
+    color: #ef432c;
+    width: 620px;
+    margin: auto;
+  }
+
+  h3 {
+    /* font-family: 'Playfair Display', serif; */
+    font-family: "Libre Baskerville", serif;
+    font-size: 30px;
+    font-weight: 700;
+    color: #ef432c;
+    text-align: left;
+    max-width: 700px;
+    margin: 20px auto 5px;
+  }
+
+  h3:first-child {
+    margin-top: 10px;
+  }
+
+  h4 {
+    font-size: 24px;
+    color: #171d6e;
+    font-weight: 900;
+    max-width: 700px;
+    text-align: left;
+    margin: auto;
+  }
+
+  p {
+    padding: 10px 0;
+    font-size: 16px;
+    max-width: 700px;
+    margin: auto;
+    line-height: 2;
+    color: #333;
+  }
+
+  a {
+    color: #333;
+    cursor: pointer;
+  }
+
+  header {
+    margin-bottom: 40px;
+  }
+
   img {
-    page-break-inside: avoid;
+    display: block;
+    margin: 20px auto;
+    max-width: 700px;
+    border: 1px solid #ccc;
+    padding: 5px;
+    max-height: calc(297mm - 200px);
   }
 
-  p,
-  h2,
-  h3 {
-    orphans: 3;
-    widows: 3;
+  img.book-cover {
+    margin-top: 70px;
+    margin-bottom: 50px;
+    position: relative;
+    left: -40px;
+    max-height: 800px;
+    border: 0;
+    padding: 0;
   }
 
-  h2,
-  h3 {
-    page-break-after: avoid;
+  .logo-holder {
+    position: absolute;
+    width: 100%;
+    left: 0;
+    bottom: 30px;
+    padding: 300px 0 80px;
+  }
+
+  .logo-holder img {
+    margin: auto;
+    width: 100px;
+  }
+
+  .logo-ribbon img {
+    width: 300px;
+    margin: 40px auto;
+  }
+
+  form {
+    border: 1px solid #ccc;
+    padding: 20px;
+    width: 600px;
+    margin: 40px auto;
+  }
+
+  .input-group {
+    display: flex;
+    padding: 10px 0;
+  }
+
+  label {
+    display: block;
+    width: 200px;
+    font-weight: 900;
+    padding-right: 10px;
+  }
+
+  input[type="text"] {
+    display: block;
+    flex-grow: 1;
+    position: relative;
+    top: -3px;
+    padding: 0;
+    border: 0;
+    border-bottom: 1px solid #333;
+  }
+
+  table {
+    width: 100%;
+    max-width: 700px;
+    margin: 40px auto;
+    border: 1px solid #333;
+  }
+
+  th,
+  td {
+    width: 33.333%;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #333;
+  }
+
+  th {
+    font-weight: 900;
+    color: #ef432c;
+    border: 1px solid #333;
+  }
+
+  .row-empty {
+    height: 600px;
+  }
+
+  .action-table td {
+    border: 0;
+    border-right: 1px solid #333;
+  }
+
+  .action-table tr:nth-child(3n) {
+    border-bottom: 1px solid #333;
+  }
+
+  .underlines {
+    padding-top: 0;
+    height: 25px;
+    width: 100%;
+    border-bottom: 1px solid #333;
+  }
+
+  h4 {
+    margin-top: 15px;
+  }
+
+  h4 + ul {
+    margin-top: 10px;
+  }
+
+  ul,
+  ol {
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  ol {
+    list-style: decimal;
+    padding-left: 40px;
+  }
+
+  li {
+    padding: 10px 0;
+  }
+
+  li p {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  ul.bullet-list {
+    list-style: disc;
+    padding-left: 40px;
+  }
+
+  ul.bullet-list ul {
+    list-style: disc;
+  }
+
+  ul.bullet-list li {
+    padding: 5px 0;
+  }
+
+  li [type="checkbox"] {
+    margin-right: 10px;
+    position: relative;
+    top: -2px;
+  }
+
+  li ul {
+    margin: 10px 0 10px 20px;
+  }
+
+  .table-of-contents li {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .spacer {
+    /* border-bottom: 2px dotted #333; */
+    flex: 1;
+    margin-left: 10px;
+    margin-right: 10px;
+    position: relative;
+    top: -6px;
+  }
+
+  @page {
+    margin: 1cm 2cm;
+  }
+
+  @media print {
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      text-align: center;
+      width: 100%;
+    }
+
+    .page-content {
+      border-bottom: 0;
+    }
+
+    hr {
+      display: none;
+    }
+
+    .content-block,
+    p {
+      page-break-inside: avoid;
+    }
+
+    html,
+    body {
+      background-color: #fff;
+      width: 210mm;
+      height: 297mm;
+    }
   }
 }
